@@ -1,0 +1,89 @@
+services:
+  bot:
+    build: .
+    container_name: longatti-bot
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      - evolution-api
+    networks:
+      - clinic-net
+
+  evolution-api:
+    # v2 exige PostgreSQL + Redis, mas traz suporte completo a LID
+    # (endereçamento novo do WhatsApp), necessário para responder a
+    # contatos não salvos / pacientes novos.
+    image: evoapicloud/evolution-api:v2.3.7
+    container_name: longatti-evolution
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - SERVER_URL=http://localhost:8080
+      - AUTHENTICATION_API_KEY=${EVOLUTION_API_KEY}
+      - AUTHENTICATION_TYPE=apikey
+      - DEL_INSTANCE=false
+      - LOG_LEVEL=ERROR,WARN,INFO,WEBHOOKS
+      - QRCODE_LIMIT=30
+      # Versão do WhatsApp Web — desatualizada gera loop "Timed Out" sem QR.
+      # Atualizar conforme github WhiskeySockets/Baileys baileys-version.json.
+      - CONFIG_SESSION_PHONE_VERSION=2.3000.1035194821
+      # ---- Banco de dados (PostgreSQL) ----
+      - DATABASE_ENABLED=true
+      - DATABASE_PROVIDER=postgresql
+      - DATABASE_CONNECTION_URI=postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/evolution?schema=public
+      - DATABASE_CONNECTION_CLIENT_NAME=evolution
+      - DATABASE_SAVE_DATA_INSTANCE=true
+      - DATABASE_SAVE_DATA_NEW_MESSAGE=true
+      - DATABASE_SAVE_MESSAGE_UPDATE=true
+      - DATABASE_SAVE_DATA_CONTACTS=true
+      - DATABASE_SAVE_DATA_CHATS=true
+      # ---- Cache (Redis) ----
+      - CACHE_REDIS_ENABLED=true
+      - CACHE_REDIS_URI=redis://redis:6379/6
+      - CACHE_REDIS_PREFIX_KEY=evolution
+      - CACHE_REDIS_SAVE_INSTANCES=false
+      - CACHE_LOCAL_ENABLED=false
+    volumes:
+      - evolution_instances:/evolution/instances
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - clinic-net
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: longatti-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=evolution
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - clinic-net
+
+  redis:
+    image: redis:7-alpine
+    container_name: longatti-redis
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    networks:
+      - clinic-net
+
+volumes:
+  evolution_instances:
+  postgres_data:
+  redis_data:
+
+networks:
+  clinic-net:
+    driver: bridge

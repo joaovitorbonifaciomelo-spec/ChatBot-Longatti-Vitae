@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(& \"C:\\\\Program Files\\\\nodejs\\\\node.exe\" \"d:\\\\Agente Longatti\\\\_smoketest.js\")"
+    ]
+  }
+}

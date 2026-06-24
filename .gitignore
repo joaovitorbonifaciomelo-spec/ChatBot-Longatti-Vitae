@@ -1,0 +1,12 @@
+# Dependências (reinstaladas com `npm install` na VPS — binários são por-SO)
+node_modules/
+
+# Segredos e dados de runtime (NÃO sobem para o repositório)
+.env
+data/clients.json
+data/botox.json
+
+# Logs / artefatos
+npm-debug.log*
+*.log
+qr-*.png
