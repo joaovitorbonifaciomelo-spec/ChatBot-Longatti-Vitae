@@ -19,7 +19,7 @@
 
   "fluxo": {
     "saudacao": {
-      "texto": "Olá! Seja muito bem-vindo(a) à {{clinica}} 💙\nÉ um prazer ter você por aqui. Para que possamos te atender da melhor forma, me conta:\nEsta é a sua primeira consulta conosco ou você já é nosso(a) paciente?",
+      "texto": "Olá! Seja muito bem-vindo(a) à {{clinica}} 🤎\nÉ um prazer ter você por aqui. Para que possamos te atender da melhor forma, me conta:\nEsta é a sua primeira consulta conosco ou você já é nosso(a) paciente?",
       "botoes": [
         { "id": "primeira", "label": "Primeira consulta" },
         { "id": "retorno", "label": "Retorno" }
@@ -35,14 +35,14 @@
     },
 
     "retorno": {
-      "texto": "Que alegria ter você de volta! 💙\nVou te direcionar agora à nossa secretária, que cuidará do seu atendimento com todo o carinho. Um instante, por favor."
+      "texto": "Que alegria ter você de volta! 🤎\nVou te direcionar agora à nossa secretária, que cuidará do seu atendimento com todo o carinho. Um instante, por favor."
     },
 
     "infoPrimeiraConsulta": [
-      "Será um prazer te receber! Deixa eu te contar um pouquinho sobre a gente. 😊\nA {{clinica}} é um espaço dedicado à sua saúde, bem-estar e autoestima. Unimos cuidado, acolhimento e excelência para oferecer um atendimento humano e individualizado a cada paciente. 💙",
+      "Será um prazer te receber! Deixa eu te contar um pouquinho sobre a gente. 😊\nA {{clinica}} é um espaço dedicado à sua saúde, bem-estar e autoestima. Unimos cuidado, acolhimento e excelência para oferecer um atendimento humano e individualizado a cada paciente. 🤎",
       "👩‍⚕️ À frente da clínica está a {{medica}}, Nutróloga e Dermatologista, com um olhar atento e cuidadoso para a saúde, a estética e a qualidade de vida de cada pessoa que atende.",
-      "📋 *Convênios atendidos*\n\nTrabalhamos com: Mediservice, Samp, SulAmérica e Bradesco Saúde.\n💰 Consulta particular: R$ 500,00\nNão tem nenhum desses convênios? Sem problemas! Para você, oferecemos um desconto especial no valor da consulta particular. 💙",
-      "📅 *Dias e horários de atendimento*\n\nSegundas, quartas, quintas e sextas-feiras, das 10h às 17h30.\n\n📍 *Onde estamos*\n\nEdifício Órion Complex\nAv. Portugal, 1148 — Setor Marista\nTorre B, Sala 2406B\n\nUm ambiente pensado para o seu conforto e acolhimento. 🤍"
+      "📋 *Convênios atendidos*\n\nTrabalhamos com: Mediservice, Samp, SulAmérica e Bradesco Saúde.\n💰 Consulta particular: R$ 500,00\nNão tem nenhum desses convênios? Sem problemas! Para você, oferecemos um desconto especial no valor da consulta particular. 🤎",
+      "📅 *Dias e horários de atendimento*\n\nSegundas, quartas, quintas e sextas-feiras, das 10h às 17h30.\n\n📍 *Onde estamos*\n\nEdifício Órion Complex\nAv. Portugal, 1148 — Setor Marista\nTorre B, Sala 2406B\n\nUm ambiente pensado para o seu conforto e acolhimento. 🤎"
     ],
 
     "ofereceAgendar": {
@@ -54,7 +54,7 @@
     },
 
     "recusaAgendar": {
-      "texto": "Sem problemas! Fico muito feliz em ter te ajudado. 💙\nSempre que precisar, estaremos por aqui de portas abertas. Cuide-se e até breve!"
+      "texto": "Sem problemas! Fico muito feliz em ter te ajudado. 🤎\nSempre que precisar, estaremos por aqui de portas abertas. Cuide-se e até breve!"
     },
 
     "perguntaConvenio": {
@@ -67,7 +67,7 @@
     },
 
     "outroConvenio": {
-      "texto": "Combinado! Nossa secretária vai te apresentar o valor com desconto especial e organizar tudo para a sua consulta. 💙\nUm instante, por favor!"
+      "texto": "Combinado! Nossa secretária vai te apresentar o valor com desconto especial e organizar tudo para a sua consulta. 🤎\nUm instante, por favor!"
     },
 
     "transfereAgendamento": {
@@ -75,7 +75,7 @@
     },
 
     "foraDeHorario": {
-      "texto": "Muito obrigado(a) pelo seu contato! 🙏\nNosso atendimento funciona de segunda a sexta, das 8h às 18h. Nossa secretária dará continuidade ao seu atendimento assim que possível.\nAgradecemos a sua preferência e já já retornamos! 💙"
+      "texto": "Muito obrigado(a) pelo seu contato! 🙏\nNosso atendimento funciona de segunda a sexta, das 8h às 18h. Nossa secretária dará continuidade ao seu atendimento assim que possível.\nAgradecemos a sua preferência e já já retornamos! 🤎"
     },
 
     "naoEntendi": {
@@ -97,31 +97,31 @@
       },
       "pascoa": {
         "ativo": true,
-        "texto": "🤍 *Feliz Páscoa!*\n\nQue este momento traga renovação, leveza e esperança ao seu coração. A {{clinica}} deseja a você e à sua família uma Páscoa serena e cheia de afeto."
+        "texto": "🤎 *Feliz Páscoa!*\n\nQue este momento traga renovação, leveza e esperança ao seu coração. A {{clinica}} deseja a você e à sua família uma Páscoa serena e cheia de afeto."
       },
       "diaDaMulher": {
         "ativo": true,
         "_comentario": "Enviado só para contatos cujo 1º nome indica mulher.",
-        "texto": "🌹 *Feliz Dia da Mulher!*\n\nÀ mulher que encanta por onde passa: hoje a {{clinica}} celebra a sua força, a sua beleza e a sua essência única. Que você nunca deixe de se cuidar e de brilhar. Você merece. 💙"
+        "texto": "🌹 *Feliz Dia da Mulher!*\n\nÀ mulher que encanta por onde passa: hoje a {{clinica}} celebra a sua força, a sua beleza e a sua essência única. Que você nunca deixe de se cuidar e de brilhar. Você merece. 🤎"
       },
       "diaDasMaes": {
         "ativo": true,
         "_comentario": "Enviado só para mulheres com filhos (hasChildren = true).",
-        "texto": "🌷 *Feliz Dia das Mães!*\n\nÀ mulher que cuida, acolhe e inspira: hoje a {{clinica}} celebra você. Que esta data seja tão especial quanto o seu amor — você merece todo o cuidado e carinho do mundo. 💙"
+        "texto": "🌷 *Feliz Dia das Mães!*\n\nÀ mulher que cuida, acolhe e inspira: hoje a {{clinica}} celebra você. Que esta data seja tão especial quanto o seu amor — você merece todo o cuidado e carinho do mundo. 🤎"
       }
     },
 
     "aniversario": {
       "ativo": true,
       "_comentario": "Requer 'birthday' (DD/MM/AAAA) no cadastro do contato. O fluxo de botões NÃO coleta isso hoje — fica dormente até alguém preencher.",
-      "texto": "🌷 *Feliz aniversário, {{nome}}!*\n\nHoje é um dia especial, e toda a equipe da {{clinica}} deseja que ele seja tão radiante quanto você. Que este novo ciclo traga saúde, leveza e muitos motivos para celebrar a sua melhor versão. ✨\n\nSerá uma honra continuar cuidando de você. Com carinho. 💙"
+      "texto": "🌷 *Feliz aniversário, {{nome}}!*\n\nHoje é um dia especial, e toda a equipe da {{clinica}} deseja que ele seja tão radiante quanto você. Que este novo ciclo traga saúde, leveza e muitos motivos para celebrar a sua melhor versão. ✨\n\nSerá uma honra continuar cuidando de você. Com carinho. 🤎"
     },
 
     "botox": {
       "ativo": true,
       "intervaloMeses": 4,
       "_comentario": "A secretária registra com '#botox <número>'. O lembrete dispara a cada 'intervaloMeses' meses.",
-      "texto": "💙 Olá! Tudo bem?\n\nJá se aproximam os {{meses}} meses desde a sua última aplicação de toxina botulínica — o momento ideal para renovar e preservar aquele resultado natural e harmonioso que você tanto gosta. ✨\n\nQue tal agendarmos o seu retorno na {{clinica}}? Será um prazer receber você novamente."
+      "texto": "🤎 Olá! Tudo bem?\n\nJá se aproximam os {{meses}} meses desde a sua última aplicação de toxina botulínica — o momento ideal para renovar e preservar aquele resultado natural e harmonioso que você tanto gosta. ✨\n\nQue tal agendarmos o seu retorno na {{clinica}}? Será um prazer receber você novamente."
     }
   }
 }
