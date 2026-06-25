@@ -52,15 +52,31 @@ function parseMessage(data) {
       message.interactiveResponseMessage.nativeFlowResponseMessage.paramsJson) ||
     '';
 
+  // Mídia sem texto (áudio, figurinha, imagem/vídeo sem legenda, documento...).
+  // Em vez de ignorar (bot mudo), marcamos para o fluxo orientar o paciente a
+  // responder por texto/número.
+  const hasMedia = !!(
+    message.audioMessage ||
+    message.imageMessage ||
+    message.videoMessage ||
+    message.stickerMessage ||
+    message.documentMessage ||
+    message.documentWithCaptionMessage ||
+    message.contactMessage ||
+    message.locationMessage ||
+    message.pollCreationMessage
+  );
+
   const text =
     buttonReply ||
     message.conversation ||
     (message.extendedTextMessage && message.extendedTextMessage.text) ||
     (message.imageMessage && message.imageMessage.caption) ||
     (message.videoMessage && message.videoMessage.caption) ||
+    (!fromMe && hasMedia ? '__MEDIA__' : '') ||
     '';
 
-  // Mensagens recebidas (não fromMe) sem texto são ignoradas.
+  // Mensagens recebidas (não fromMe) sem texto e sem mídia são ignoradas.
   // fromMe sem texto ainda interessa (takeover manual em mídia/áudio).
   if (!fromMe && !text) return null;
 
