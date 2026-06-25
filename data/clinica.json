@@ -79,7 +79,7 @@
     },
 
     "naoEntendi": {
-      "texto": "Desculpe, não entendi. 😊 Por favor, toque em um dos botões acima (ou responda com o número da opção)."
+      "texto": "Desculpe, não entendi. 😊 Por favor, responda apenas com o *número* da opção desejada (ex.: 1)."
     }
   },
 
