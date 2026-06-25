@@ -10,6 +10,9 @@ const SECRETARY_NUMBER = (process.env.SECRETARY_NUMBER || '').replace(/\D/g, '')
 const GROUP_WINDOW_MS = parseInt(process.env.MESSAGE_GROUP_WINDOW_MS || '5000', 10);
 // Pausa do bot quando a secretária assume a conversa manualmente (default 1h).
 const TAKEOVER_PAUSE_MS = parseInt(process.env.TAKEOVER_PAUSE_MS || '3600000', 10);
+// Após este tempo de inatividade, a conversa "expira" e o fluxo recomeça do
+// zero na próxima mensagem (default 6h). 0 desliga o reinício automático.
+const SESSION_RESET_MS = parseInt(process.env.SESSION_RESET_MS || '21600000', 10);
 
 // Sessões em memória, indexadas pelo JID do paciente.
 // Reiniciam quando o processo/container é reiniciado.
@@ -50,9 +53,20 @@ async function flushBuffer(jid) {
   const text = buf.texts.join('\n').trim();
   if (!text) return;
 
+  // Conversa parada por muito tempo: descarta a sessão p/ recomeçar do início.
+  const existing = sessions[jid];
+  if (
+    existing &&
+    SESSION_RESET_MS > 0 &&
+    Date.now() - (existing.lastActivity || 0) > SESSION_RESET_MS
+  ) {
+    delete sessions[jid];
+  }
+
   if (!sessions[jid]) {
     sessions[jid] = flow.createSession(buf.number, buf.pushName);
   }
+  sessions[jid].lastActivity = Date.now();
 
   try {
     await flow.handle(jid, text, sessions[jid]);
