@@ -89,34 +89,15 @@ function buttonsAsText(text, buttons) {
   return `${text}\n\n${lines.join('\n')}`;
 }
 
-// Envia uma mensagem com botões de resposta rápida (máx. 3 no WhatsApp).
-// `buttons`: [{ id, label }]. Se a Evolution recusar o formato de botões
-// (comum no Baileys), cai para texto numerado — o fluxo aceita ambos.
+// Apresenta uma pergunta com opções. `buttons`: [{ id, label }].
+//
+// IMPORTANTE: os botões interativos do Baileys NÃO renderizam em contas
+// não-oficiais — chegam ao paciente como "Não foi possível carregar a
+// mensagem". Por isso enviamos as opções como TEXTO NUMERADO, que sempre
+// chega. O matcher do fluxo aceita toque, número ("1") ou palavra ("retorno"),
+// então a experiência do paciente continua a mesma.
 async function sendButtons(target, text, buttons, opts = {}) {
-  const delay = opts.delay !== undefined ? opts.delay : REPLY_DELAY_MS;
-  const number = toJid(target);
-  try {
-    const { data } = await client.post(`/message/sendButtons/${INSTANCE}`, {
-      number,
-      title: '',
-      description: text,
-      footer: '',
-      buttons: buttons.slice(0, 3).map((b) => ({
-        type: 'reply',
-        displayText: b.label,
-        id: b.id,
-      })),
-      delay,
-    });
-    const id = data && data.key && data.key.id;
-    rememberSentId(id);
-    return data;
-  } catch (err) {
-    const detail = err.response ? JSON.stringify(err.response.data) : err.message;
-    console.warn(`[evolution] Botões falharam para ${target}, usando texto. Detalhe:`, detail);
-    // Fallback: texto numerado (o handler aceita resposta por número ou palavra).
-    return sendText(target, buttonsAsText(text, buttons), opts);
-  }
+  return sendText(target, buttonsAsText(text, buttons), opts);
 }
 
 module.exports = { sendText, sendButtons, toJid, wasSentByBot };
