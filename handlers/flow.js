@@ -114,8 +114,8 @@ function createSession(number, pushName) {
 }
 
 // ---------- Máquina de estados ----------
-// start -> tipo_consulta -> [confirma_primeira -> oferece_agendar -> pergunta_convenio] -> done
-//                        \-> (retorno) -------------------------------------------------> done
+// start -> tipo_consulta -> [oferece_agendar -> pergunta_convenio] -> done
+//                        \-> (retorno) ------------------------------> done
 
 async function handle(jid, text, session) {
   const cfg = loadConfig();
@@ -137,20 +137,7 @@ async function handle(jid, text, session) {
       if (opt.id === 'retorno') {
         return finishTransfer(jid, session, 'Retorno', render(f.retorno.texto, c));
       }
-      // Primeira consulta: confirma que nunca consultou.
-      await sendButtons(jid, render(f.confirmaPrimeira.texto, c), f.confirmaPrimeira.botoes);
-      session.state = 'confirma_primeira';
-      return;
-    }
-
-    case 'confirma_primeira': {
-      const opt = matchOption(text, f.confirmaPrimeira.botoes);
-      if (!opt) return reaskStep(jid, f.confirmaPrimeira, c, f);
-
-      if (opt.id === 'na_verdade_retorno') {
-        return finishTransfer(jid, session, 'Retorno', render(f.retorno.texto, c));
-      }
-      // Confirmou primeira vez: dispara as informações + oferta de agendamento.
+      // Primeira consulta: dispara as informações + oferta de agendamento.
       for (const m of f.infoPrimeiraConsulta) {
         await sendText(jid, render(m, c), { delay: 1200 });
       }
