@@ -104,6 +104,9 @@ async function finishTransfer(jid, session, motivo, preMessage) {
 
   saveContact(session);
   session.state = 'done';
+  // Sinaliza ao messageHandler que este paciente foi entregue à secretária,
+  // para ele silenciar o bot nessa conversa (atendimento em andamento).
+  session.transferred = true;
 }
 
 // ---------- Sessão ----------

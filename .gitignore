@@ -5,6 +5,7 @@ node_modules/
 .env
 data/clients.json
 data/botox.json
+data/pausas.json
 
 # Logs / artefatos
 npm-debug.log*

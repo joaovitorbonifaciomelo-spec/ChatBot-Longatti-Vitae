@@ -5,6 +5,7 @@ const { normalizeBR } = require('./phone');
 const DATA_DIR = path.join(__dirname, '..', 'data');
 const CLIENTS_FILE = path.join(DATA_DIR, 'clients.json');
 const BOTOX_FILE = path.join(DATA_DIR, 'botox.json');
+const PAUSAS_FILE = path.join(DATA_DIR, 'pausas.json');
 
 // Garante que o arquivo exista; se não, cria com array vazio.
 function ensureFile(file) {
@@ -82,6 +83,29 @@ function saveBotox(record) {
   return normalized;
 }
 
+// ---------- Pausas de atendimento humano (JID -> timestamp de expiração) ----------
+// Mapa objeto (não array), persistido para sobreviver a reinícios do bot.
+
+function getPausas() {
+  try {
+    if (!fs.existsSync(PAUSAS_FILE)) return {};
+    const raw = fs.readFileSync(PAUSAS_FILE, 'utf8').trim();
+    return raw ? JSON.parse(raw) : {};
+  } catch (err) {
+    console.error(`[db] Erro lendo ${PAUSAS_FILE}:`, err.message);
+    return {};
+  }
+}
+
+function savePausas(map) {
+  try {
+    if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+    fs.writeFileSync(PAUSAS_FILE, JSON.stringify(map), 'utf8');
+  } catch (err) {
+    console.error(`[db] Erro salvando ${PAUSAS_FILE}:`, err.message);
+  }
+}
+
 module.exports = {
   getClients,
   getClientByNumber,
@@ -89,4 +113,6 @@ module.exports = {
   getBotoxRecords,
   getBotoxByNumber,
   saveBotox,
+  getPausas,
+  savePausas,
 };

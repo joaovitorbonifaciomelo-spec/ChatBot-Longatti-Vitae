@@ -2,14 +2,17 @@ const flow = require('./flow');
 const secretary = require('./secretary');
 const { wasSentByBot } = require('../services/evolutionApi');
 const { samePhone } = require('../services/phone');
+const { getPausas, savePausas } = require('../services/db');
 
 const SECRETARY_NUMBER = (process.env.SECRETARY_NUMBER || '').replace(/\D/g, '');
 
 // Janela de agrupamento: ms de silêncio após a última mensagem antes de
 // processar o "bloco" de mensagens como um só contexto.
 const GROUP_WINDOW_MS = parseInt(process.env.MESSAGE_GROUP_WINDOW_MS || '5000', 10);
-// Pausa do bot quando a secretária assume a conversa manualmente (default 1h).
-const TAKEOVER_PAUSE_MS = parseInt(process.env.TAKEOVER_PAUSE_MS || '3600000', 10);
+// Pausa do bot quando a conversa está em "atendimento humano": a secretária
+// respondeu manualmente OU o paciente foi transferido a ela. Renovada a cada
+// resposta manual da secretária. Default 3 dias (259200000).
+const TAKEOVER_PAUSE_MS = parseInt(process.env.TAKEOVER_PAUSE_MS || '259200000', 10);
 // Após este tempo de inatividade, a conversa "expira" e o fluxo recomeça do
 // zero na próxima mensagem (default 6h). 0 desliga o reinício automático.
 const SESSION_RESET_MS = parseInt(process.env.SESSION_RESET_MS || '21600000', 10);
@@ -21,14 +24,33 @@ const sessions = {};
 // Buffers de agrupamento por JID: { texts: [], timer }.
 const buffers = {};
 
-// Conversas pausadas por takeover manual: JID -> timestamp (ms) de expiração.
-const pausedUntil = {};
+// Conversas em atendimento humano: JID -> timestamp (ms) de expiração.
+// Persistido em data/pausas.json para sobreviver a reinícios do bot.
+const pausedUntil = loadPausas();
+
+// Carrega as pausas salvas, descartando as que já expiraram.
+function loadPausas() {
+  const saved = getPausas();
+  const now = Date.now();
+  const clean = {};
+  for (const [jid, until] of Object.entries(saved)) {
+    if (until > now) clean[jid] = until;
+  }
+  return clean;
+}
+
+// (Re)inicia a pausa de atendimento humano para a conversa e persiste em disco.
+function pausar(jid) {
+  pausedUntil[jid] = Date.now() + TAKEOVER_PAUSE_MS;
+  savePausas(pausedUntil);
+}
 
 function isPaused(jid) {
   const until = pausedUntil[jid];
   if (!until) return false;
   if (Date.now() >= until) {
     delete pausedUntil[jid];
+    savePausas(pausedUntil);
     return false;
   }
   return true;
@@ -70,6 +92,11 @@ async function flushBuffer(jid) {
 
   try {
     await flow.handle(jid, text, sessions[jid]);
+    // Paciente transferido à secretária: silencia o bot nessa conversa
+    // (atendimento em andamento), para não repetir o fluxo nos próximos dias.
+    if (sessions[jid] && sessions[jid].transferred) {
+      pausar(jid);
+    }
   } catch (err) {
     console.error('[messageHandler] Erro processando mensagem:', err.message);
   }
@@ -102,11 +129,11 @@ async function handleMessage({ jid, number, text, fromMe, messageId, pushName })
     if (wasSentByBot(messageId)) return;
     // Caso contrário, a secretária digitou manualmente para este cliente:
     // pausa o bot nessa conversa e cancela qualquer resposta pendente.
-    pausedUntil[jid] = Date.now() + TAKEOVER_PAUSE_MS;
+    pausar(jid);
     clearBuffer(jid);
     console.log(
       `[messageHandler] Atendimento manual detectado para ${jid}; ` +
-        `bot pausado por ${Math.round(TAKEOVER_PAUSE_MS / 60000)} min.`
+        `bot em silêncio por ${Math.round(TAKEOVER_PAUSE_MS / 3600000)}h.`
     );
     return;
   }
