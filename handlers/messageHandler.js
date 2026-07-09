@@ -133,7 +133,7 @@ async function handleMessage({ jid, number, text, fromMe, messageId, pushName })
     clearBuffer(jid);
     console.log(
       `[messageHandler] Atendimento manual detectado para ${jid}; ` +
-        `bot em silêncio por ${Math.round(TAKEOVER_PAUSE_MS / 3600000)}h.`
+        `bot em silêncio por ${Math.round(TAKEOVER_PAUSE_MS / 86400000)} dia(s).`
     );
     return;
   }
